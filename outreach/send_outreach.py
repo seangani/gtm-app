@@ -4,6 +4,8 @@
 Reads contacts from a CSV, fills {placeholders} in a template, and sends each
 email through either:
 
+  mail     - the Apple Mail app already signed in on this Mac (default on Mac).
+             Add your school account in System Settings > Internet Accounts.
   outlook  - the Outlook desktop app already signed in on this computer
              (Windows only, needs `pip install pywin32`). Works with
              school/work Microsoft 365 accounts that block SMTP and API apps,
@@ -23,6 +25,7 @@ import getpass
 import os
 import random
 import smtplib
+import subprocess
 import sys
 import time
 from datetime import datetime
@@ -69,6 +72,38 @@ def fill(template, contact, where):
         return template.format(**contact)
     except KeyError as e:
         sys.exit(f"{where} uses {{{e.args[0]}}} but contacts.csv has no '{e.args[0]}' column")
+
+
+MAIL_SCRIPT = """
+on run {toAddr, subj, msgBody, fromAddr}
+    tell application "Mail"
+        set m to make new outgoing message with properties {subject:subj, content:msgBody, visible:false}
+        tell m
+            make new to recipient at end of to recipients with properties {address:toAddr}
+            if fromAddr is not "" then set sender to fromAddr
+        end tell
+        send m
+    end tell
+end run
+"""
+
+
+class MailSender:
+    def __init__(self, args):
+        if sys.platform != "darwin":
+            sys.exit("Mail backend only works on a Mac")
+        self.sender = args.sender or ""
+
+    def send(self, to, subject, body):
+        r = subprocess.run(
+            ["osascript", "-e", MAIL_SCRIPT, to, subject, body, self.sender],
+            capture_output=True, text=True,
+        )
+        if r.returncode:
+            raise RuntimeError(r.stderr.strip() or "Mail refused to send")
+
+    def close(self):
+        pass
 
 
 class OutlookSender:
@@ -124,12 +159,13 @@ def main():
     p.add_argument("--contacts", default=HERE / "contacts.csv")
     p.add_argument("--template", default=HERE / "template.txt")
     p.add_argument("--log", default=HERE / "sent_log.csv", type=Path)
-    p.add_argument("--backend", choices=["outlook", "smtp"], default="outlook")
+    p.add_argument("--backend", choices=["mail", "outlook", "smtp"],
+                   default="mail" if sys.platform == "darwin" else "outlook")
     p.add_argument("--send", action="store_true", help="actually send (default is a dry run)")
     p.add_argument("--test", metavar="YOUR_EMAIL", help="send only the first contact's email, to yourself")
     p.add_argument("--limit", type=int, default=40, help="max emails this run (default 40)")
     p.add_argument("--delay", type=float, default=60, help="average seconds between emails (default 60)")
-    p.add_argument("--sender", help="SMTP: your email address")
+    p.add_argument("--sender", help="your email address (picks the account in Mail; required for SMTP)")
     p.add_argument("--host", default="smtp.office365.com")
     p.add_argument("--port", type=int, default=587)
     args = p.parse_args()
@@ -153,7 +189,8 @@ def main():
         print("Dry run only. Add --test you@northeastern.edu to email yourself, or --send to send for real.")
         return
 
-    sender = (OutlookSender if args.backend == "outlook" else SmtpSender)(args)
+    backends = {"mail": MailSender, "outlook": OutlookSender, "smtp": SmtpSender}
+    sender = backends[args.backend](args)
     try:
         for i, c in enumerate(todo, 1):
             subject, body = fill(subject_t, c, "subject"), fill(body_t, c, "template")
