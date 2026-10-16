@@ -24,6 +24,7 @@ import csv
 import getpass
 import os
 import random
+import re
 import smtplib
 import subprocess
 import sys
@@ -43,11 +44,19 @@ def load_template(path):
     return first.split(":", 1)[1].strip(), body.lstrip("\n")
 
 
+def column_key(header):
+    # "First Name" -> first_name, "Email (Apollo)" -> email_apollo
+    return re.sub(r"[^a-z0-9]+", "_", (header or "").lower()).strip("_")
+
+
 def load_contacts(path):
     with open(path, newline="", encoding="utf-8-sig") as f:
-        rows = [{k.strip(): (v or "").strip() for k, v in r.items()} for r in csv.DictReader(f)]
-    if not rows or "email" not in rows[0]:
-        sys.exit(f"{path}: needs a header row with at least an 'email' column")
+        rows = [{column_key(k): (v or "").strip() for k, v in r.items() if k} for r in csv.DictReader(f)]
+    email_col = next((k for k in (rows[0] if rows else {}) if k == "email" or k.startswith("email_")), None)
+    if not email_col:
+        sys.exit(f"{path}: needs a header row with an 'email' column")
+    for r in rows:
+        r["email"] = r[email_col]
     return [r for r in rows if r["email"]]
 
 
