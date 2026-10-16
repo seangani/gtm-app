@@ -4,9 +4,9 @@ Hi {first_name}, hope you're well!
 
 I'm Sean, and I'm partnered with Family Office, a design studio in NYC that uses Terms (https://terms.so) to manage all their contracts, SOWs and retainer renewals in one place, from drafting and redlining with clients through to signing.
 
-We're running a free pilot with a small, hand-picked group of design studios, and I thought {company} would be a great fit. There's nothing to buy; we're just looking for honest feedback.
+We're talking to design studios to learn how they handle contracts today and what gets in the way, so we can shape Terms around the problems teams like {company} actually have.
 
-Would you be open to a quick 15-minute walkthrough next week?
+Would you be open to a quick 15-minute call next week to share how you handle contracts? I'd love to hear what works and what doesn't.
 
 Best,
 Sean
