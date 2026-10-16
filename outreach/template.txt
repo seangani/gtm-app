@@ -2,16 +2,16 @@ Subject: Quick question about {company}
 
 Hi {first_name}, hope you're well!
 
-I'm Sean, and I'm partnered with Family Office, a design studio in NYC that uses Terms (https://terms.so) to manage all their contracts, SOWs and retainer renewals in one place, from drafting and redlining with clients through to signing.
+I'm Sean, a student from Northeastern and I’m currently partnered with Family Office, a design studio in NYC. Family Office has recently developed a website called Terms.so to manage and draft contracts, SOWs and retainer renewals all in one place.
 
-We're talking to design studios to learn how they handle contracts today and what gets in the way, so we can shape Terms around the problems teams like {company} actually have.
+We're running a pilot on Terms with a small, hand-picked group of design studios, and I thought {company} would be a great fit to take advantage of the tool. There's nothing to buy, no strings attached - we're really just looking for honest feedback.
 
 Would you be open to a quick 15-minute call next week to share how you handle contracts? I'd love to hear what works and what doesn't.
+
+Thank you for your time and I look forward to hearing from you.
 
 Best,
 Sean
 
 Sean Alden Gani
 +1 781-815-0191 | gani.s@northeastern.edu | Terms.so
-
-If this isn't relevant, just reply "no thanks" and I won't reach out again.
