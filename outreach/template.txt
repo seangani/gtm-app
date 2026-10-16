@@ -1,0 +1,15 @@
+Subject: Quick question about how {company} handles contracts
+
+Hi {first_name},
+
+I'm reaching out because teams like {company} send and receive a lot of contracts: client agreements, SOWs, NDAs, contractor paperwork. Most of the ones I talk to have them spread across email threads, Google Drive folders and a separate e-sign tool.
+
+I'm working with Terms (terms.so), which keeps that whole flow in one place: drafting, redlining and commenting with the client, e-signature, and a searchable library of everything you've signed afterwards.
+
+Would you be open to a 15-minute call next week to see if it would save {company} some time?
+
+Best,
+Your Name
+Northeastern University
+
+If you'd rather not hear from me again, just reply "no thanks" and I won't follow up.
