@@ -1,15 +1,20 @@
-Subject: Quick question about how {company} handles contracts
+Subject: Quick question about {company}
 
-Hi {first_name},
+Hi {first_name}, hope you're well!
 
-I'm reaching out because teams like {company} send and receive a lot of contracts: client agreements, SOWs, NDAs, contractor paperwork. Most of the ones I talk to have them spread across email threads, Google Drive folders and a separate e-sign tool.
+I'm Sean, and I'm partnered with Family Office, a design studio in NYC that uses Terms (https://terms.so) to manage all their contracts, SOWs and retainer renewals in one place, from drafting and redlining with clients through to signing.
 
-I'm working with Terms (terms.so), which keeps that whole flow in one place: drafting, redlining and commenting with the client, e-signature, and a searchable library of everything you've signed afterwards.
+We're running a free pilot with a small, hand-picked group of design studios, and I thought {company} would be a great fit. There's nothing to buy; we're just looking for honest feedback.
 
-Would you be open to a 15-minute call next week to see if it would save {company} some time?
+Would you be open to a quick 15-minute walkthrough next week?
 
 Best,
-Your Name
-Northeastern University
+Sean
 
-If you'd rather not hear from me again, just reply "no thanks" and I won't follow up.
+Sean Alden Gani
+Northeastern University, Class of 2027
++1 781-815-0191 | gani.s@northeastern.edu
+LinkedIn: https://www.linkedin.com/in/YOUR-HANDLE
+Terms: https://terms.so
+
+If this isn't relevant, just reply "no thanks" and I won't reach out again.
