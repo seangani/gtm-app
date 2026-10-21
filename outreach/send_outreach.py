@@ -97,17 +97,50 @@ end run
 """
 
 
+# Same as MAIL_SCRIPT, but sends formatted text: the whole email in one font,
+# and the bold text (the signature name) in bold wherever a line starts with it.
+# Mail sends this as HTML with a plain-text copy.
+RICH_MAIL_SCRIPT = """
+on run {toAddr, subj, msgBody, fromAddr, fontName, boldFont, fontSize, boldText}
+    set boldLen to (count of characters of boldText)
+    tell application "Mail"
+        set m to make new outgoing message with properties {subject:subj, content:msgBody, visible:false}
+        tell m
+            make new to recipient at end of to recipients with properties {address:toAddr}
+            if fromAddr is not "" then set sender to fromAddr
+            tell content
+                set font to fontName
+                set size to (fontSize as integer)
+                if boldLen > 0 then
+                    repeat with i from 1 to (count of paragraphs)
+                        if (paragraph i as string) starts with boldText then
+                            set font of characters 1 thru boldLen of paragraph i to boldFont
+                        end if
+                    end repeat
+                end if
+            end tell
+        end tell
+        send m
+    end tell
+end run
+"""
+
+
 class MailSender:
     def __init__(self, args):
         if sys.platform != "darwin":
             sys.exit("Mail backend only works on a Mac")
         self.sender = args.sender or ""
+        self.rich = args.rich
+        self.bold = args.bold
 
     def send(self, to, subject, body):
-        r = subprocess.run(
-            ["osascript", "-e", MAIL_SCRIPT, to, subject, body, self.sender],
-            capture_output=True, text=True,
-        )
+        if self.rich:
+            cmd = ["osascript", "-e", RICH_MAIL_SCRIPT, to, subject, body, self.sender,
+                   "Helvetica", "Helvetica-Bold", "14", self.bold]
+        else:
+            cmd = ["osascript", "-e", MAIL_SCRIPT, to, subject, body, self.sender]
+        r = subprocess.run(cmd, capture_output=True, text=True)
         if r.returncode:
             raise RuntimeError(r.stderr.strip() or "Mail refused to send")
 
@@ -175,6 +208,10 @@ def main():
     p.add_argument("--limit", type=int, default=40, help="max emails this run (default 40)")
     p.add_argument("--delay", type=float, default=60, help="average seconds between emails (default 60)")
     p.add_argument("--sender", help="your email address (picks the account in Mail; required for SMTP)")
+    p.add_argument("--rich", action="store_true",
+                   help="Mail backend: send formatted (Helvetica 14, signature name in bold) instead of plain text")
+    p.add_argument("--bold", default="Sean Alden Gani",
+                   help="with --rich, text made bold where a line starts with it (default: Sean Alden Gani)")
     p.add_argument("--host", default="smtp.office365.com")
     p.add_argument("--port", type=int, default=587)
     args = p.parse_args()
